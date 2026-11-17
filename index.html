@@ -2,1781 +2,284 @@
 <!DOCTYPE html>
 <html lang="ms">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Digital Launch Ceremony</title>
-
-<style>
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
-
-:root {
-    --silver: #dce4ef;
-    --light: #f7faff;
-    --blue: #9bcaff;
-    --dark: #070b12;
-}
-
-body {
-    font-family: Arial, Helvetica, sans-serif;
-    background: var(--dark);
-    color: white;
-    overflow: hidden;
-}
-
-.page {
-    display: none;
-    position: relative;
-    width: 100vw;
-    height: 100vh;
-    min-height: 100vh;
-    overflow: hidden;
-    background:
-        radial-gradient(ellipse at center, #293646 0%, #101722 55%, #030508 100%);
-}
-
-.page.active {
-    display: flex;
-}
-
-/* COMMON */
-
-.silver-text {
-    color: #edf3fb;
-    text-shadow: 0 0 20px rgba(220,235,255,.5);
-}
-
-.primary-button {
-    padding: 15px 35px;
-    border: 1px solid #edf3fb;
-    background: linear-gradient(135deg, #f8fbff, #8795a8);
-    color: #111722;
-    font-weight: bold;
-    letter-spacing: 3px;
-    cursor: pointer;
-    transition: .3s;
-    text-transform: uppercase;
-}
-
-.primary-button:hover {
-    background: white;
-    box-shadow: 0 0 30px rgba(220,235,255,.5);
-    transform: translateY(-2px);
-}
-
-.primary-button:disabled {
-    opacity: .5;
-    cursor: not-allowed;
-}
-
-/* PAGE 1 - PASSWORD */
-
-#page1 {
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-}
-
-.password-container {
-    width: min(90%, 550px);
-    padding: 55px 35px;
-    text-align: center;
-    border: 1px solid rgba(225,232,242,.45);
-    background: rgba(15,20,29,.8);
-    box-shadow: 0 0 50px rgba(200,215,235,.15);
-    backdrop-filter: blur(12px);
-}
-
-.password-logo {
-    font-size: 55px;
-    margin-bottom: 20px;
-    color: #e1e6ed;
-    text-shadow: 0 0 25px white;
-}
-
-.password-container h1 {
-    font-size: clamp(22px, 3vw, 34px);
-    letter-spacing: 5px;
-    margin-bottom: 15px;
-}
-
-.password-container p {
-    color: #b9c4d2;
-    letter-spacing: 2px;
-    font-size: 12px;
-    line-height: 1.8;
-}
-
-.password-input {
-    display: block;
-    width: 100%;
-    margin: 35px auto 20px;
-    padding: 18px 15px;
-    background: rgba(255,255,255,.08);
-    border: 1px solid #aeb9c8;
-    color: white;
-    font-size: 30px;
-    font-weight: bold;
-    letter-spacing: 15px;
-    text-align: center;
-    outline: none;
-    text-transform: uppercase;
-}
-
-.password-input:focus {
-    border-color: white;
-    box-shadow: 0 0 18px rgba(220,230,245,.3);
-}
-
-.password-input::placeholder {
-    color: #7c8795;
-    font-size: 13px;
-    letter-spacing: 3px;
-}
-
-.error-message {
-    min-height: 20px;
-    margin-top: 15px;
-    color: #ff9d9d;
-    font-size: 12px;
-    letter-spacing: 1px;
-}
-
-/* =================================
-   PAGE 2 - CINEMATIC TRANSACTION
-================================= */
-
-#page2 {
-    justify-content: center;
-    align-items: center;
-    background:
-        radial-gradient(ellipse at center, #283545 0%, #101722 50%, #030508 100%);
-}
-
-.transaction-stage {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    padding: 20px;
-    overflow: hidden;
-}
-
-.transaction-header {
-    position: relative;
-    z-index: 5;
-    text-align: center;
-    margin-bottom: 12px;
-    animation: headerReveal 1.5s ease;
-}
-
-.system-label {
-    color: #9eafc4;
-    font-size: 10px;
-    letter-spacing: 7px;
-    margin-bottom: 12px;
-}
-
-.transaction-title {
-    font-size: clamp(25px, 4vw, 58px);
-    letter-spacing: 9px;
-    color: #f3f6fa;
-    text-shadow: 0 0 25px rgba(220,235,255,.6);
-}
-
-.transaction-subtitle {
-    color: #b9c8da;
-    font-size: 11px;
-    letter-spacing: 5px;
-    margin-top: 12px;
-}
-
-@keyframes headerReveal {
-    from {
-        opacity: 0;
-        transform: translateY(-35px);
-        filter: blur(8px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-        filter: blur(0);
-    }
-}
-
-/* SCANNING LIGHT */
-
-.scan-line {
-    position: absolute;
-    top: -10%;
-    left: 0;
-    width: 100%;
-    height: 3px;
-    z-index: 8;
-    background: #dceeff;
-    box-shadow:
-        0 0 15px #fff,
-        0 0 40px #8ccaff,
-        0 0 80px #6caeff;
-    animation: scanning 4s linear infinite;
-    opacity: .8;
-}
-
-@keyframes scanning {
-    0% { top: -10%; }
-    100% { top: 110%; }
-}
-
-/* LOADING BAR */
-
-.loading-section {
-    width: min(450px, 70vw);
-    margin: 8px 0 15px;
-    text-align: center;
-    z-index: 5;
-}
-
-.loading-bar {
-    width: 100%;
-    height: 4px;
-    background: rgba(255,255,255,.12);
-    overflow: hidden;
-    border-radius: 10px;
-}
-
-.loading-progress {
-    width: 0%;
-    height: 100%;
-    background: linear-gradient(90deg, #879bb5, #fff, #8dbbff);
-    box-shadow: 0 0 15px #dceeff;
-    transition: width .3s ease;
-}
-
-#loadingPercentage {
-    color: #cbd8e8;
-    font-size: 10px;
-    letter-spacing: 3px;
-    margin-top: 7px;
-}
-
-/* ACTIVATION COUNTDOWN */
-
-.activation-countdown {
-    position: absolute;
-    z-index: 10;
-    top: 45%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    pointer-events: none;
-}
-
-.activation-countdown span {
-    display: block;
-    font-size: clamp(80px, 15vw, 180px);
-    font-weight: bold;
-    color: white;
-    text-shadow:
-        0 0 20px #fff,
-        0 0 60px #9bcaff;
-    opacity: 0;
-}
-
-.activation-countdown.active span {
-    animation: activationZoom .9s ease forwards;
-}
-
-@keyframes activationZoom {
-    0% {
-        opacity: 0;
-        transform: scale(2.5);
-        filter: blur(15px);
-    }
-    35% {
-        opacity: 1;
-        transform: scale(1);
-        filter: blur(0);
-    }
-    75% {
-        opacity: 1;
-        transform: scale(.95);
-    }
-    100% {
-        opacity: 0;
-        transform: scale(.5);
-    }
-}
-
-/* GATE */
-
-.gate-container {
-    position: relative;
-    width: min(94vw, 145vh);
-    aspect-ratio: 16 / 9;
-    max-height: 57vh;
-    overflow: hidden;
-    perspective: 1400px;
-    border: 1px solid rgba(235,245,255,.8);
-    background: #070c14;
-    box-shadow:
-        0 0 25px rgba(220,235,255,.3),
-        0 0 90px rgba(130,180,255,.2);
-}
-
-.gate {
-    position: absolute;
-    top: 0;
-    width: 50%;
-    height: 100%;
-    z-index: 4;
-    overflow: hidden;
-    background:
-        repeating-linear-gradient(
-            90deg,
-            rgba(255,255,255,.07) 0px,
-            rgba(255,255,255,.07) 2px,
-            transparent 2px,
-            transparent 35px
-        ),
-        linear-gradient(
-            135deg,
-            #f9fbff,
-            #aab6c7 20%,
-            #e8edf5 45%,
-            #718094 70%,
-            #dce5f1
-        );
-    transition: transform 3.5s cubic-bezier(.7,0,.2,1);
-}
-
-.gate-left {
-    left: 0;
-    transform-origin: left center;
-    border-right: 2px solid white;
-}
-
-.gate-right {
-    right: 0;
-    transform-origin: right center;
-    border-left: 2px solid white;
-}
-
-.gate-pattern {
-    position: absolute;
-    inset: 8%;
-    border: 1px solid rgba(255,255,255,.7);
-    box-shadow: inset 0 0 25px rgba(255,255,255,.25);
-}
-
-.gate-symbol {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: clamp(35px, 6vw, 90px);
-    color: rgba(255,255,255,.85);
-    text-shadow: 0 0 25px white;
-}
-
-.gate-center {
-    position: absolute;
-    inset: 0;
-    z-index: 2;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    font-size: clamp(25px, 5vw, 70px);
-    letter-spacing: 12px;
-    text-shadow: 0 0 30px white;
-}
-
-/* GATE OPENING */
-
-.gate-open .gate-left {
-    transform: translateX(-105%) rotateY(25deg);
-}
-
-.gate-open .gate-right {
-    transform: translateX(105%) rotateY(-25deg);
-}
-
-/* ENERGY LIGHT */
-
-.gate-light {
-    position: absolute;
-    inset: -20%;
-    z-index: 1;
-    opacity: 0;
-    background:
-        radial-gradient(
-            circle at center,
-            rgba(255,255,255,1) 0%,
-            rgba(150,205,255,.6) 12%,
-            rgba(90,150,255,.2) 35%,
-            transparent 65%
-        );
-    transition: opacity 1.5s ease;
-}
-
-.energy-active .gate-light {
-    opacity: 1;
-    animation: energyPulse 1s infinite alternate;
-}
-
-@keyframes energyPulse {
-    from {
-        transform: scale(.8);
-        opacity: .4;
-    }
-    to {
-        transform: scale(1.2);
-        opacity: 1;
-    }
-}
-
-/* ENERGY RINGS */
-
-.energy-ring {
-    position: absolute;
-    z-index: 2;
-    top: 50%;
-    left: 50%;
-    width: 20%;
-    aspect-ratio: 1;
-    border: 2px solid rgba(210,235,255,.8);
-    border-radius: 50%;
-    transform: translate(-50%, -50%) scale(.2);
-    opacity: 0;
-    pointer-events: none;
-}
-
-.energy-active .energy-ring {
-    animation: ringExpand 2s ease-out infinite;
-}
-
-.ring-two {
-    animation-delay: 1s !important;
-}
-
-@keyframes ringExpand {
-    0% {
-        transform: translate(-50%, -50%) scale(.2);
-        opacity: .9;
-    }
-    100% {
-        transform: translate(-50%, -50%) scale(7);
-        opacity: 0;
-    }
-}
-
-/* SCREEN FLASH */
-
-.screen-flash {
-    position: absolute;
-    inset: 0;
-    z-index: 20;
-    background: white;
-    opacity: 0;
-    pointer-events: none;
-}
-
-.screen-flash.flash {
-    animation: flashEffect .65s ease-out;
-}
-
-@keyframes flashEffect {
-    0% { opacity: 0; }
-    20% { opacity: .95; }
-    100% { opacity: 0; }
-}
-
-/* CAMERA SHAKE */
-
-.camera-shake {
-    animation: cameraShake .5s ease;
-}
-
-@keyframes cameraShake {
-    0%, 100% { transform: translate(0,0); }
-    20% { transform: translate(-8px,4px); }
-    40% { transform: translate(7px,-4px); }
-    60% { transform: translate(-5px,3px); }
-    80% { transform: translate(4px,-2px); }
-}
-
-/* STATUS */
-
-.transaction-status {
-    color: #e5edf8;
-    font-size: clamp(10px, 1.4vw, 16px);
-    letter-spacing: 5px;
-    margin-top: 15px;
-    min-height: 20px;
-    text-align: center;
-    text-shadow: 0 0 12px #9fcaff;
-}
-
-.system-footer {
-    position: absolute;
-    bottom: 18px;
-    left: 0;
-    width: 100%;
-    display: flex;
-    justify-content: space-around;
-    color: #899bb1;
-    font-size: 9px;
-    letter-spacing: 2px;
-}
-
-.system-footer b {
-    color: #e6f1ff;
-}
-
-/* GATE PARTICLES */
-
-.gate-particles {
-    position: absolute;
-    inset: 0;
-    z-index: 6;
-    pointer-events: none;
-}
-
-.gate-spark {
-    position: absolute;
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
-    background: white;
-    box-shadow: 0 0 12px 3px #b8dcff;
-    animation: sparkFly 1.5s ease-out forwards;
-}
-
-@keyframes sparkFly {
-    0% {
-        opacity: 1;
-        transform: translate(0,0) scale(1);
-    }
-    100% {
-        opacity: 0;
-        transform: translate(var(--dx), var(--dy)) scale(0);
-    }
-}
-
-/* =================================
-   PAGE 3 - POSTER
-================================= */
-
-#page3 {
-    justify-content: center;
-    align-items: center;
-    padding: 12px 2vw;
-}
-
-.launch-content {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-}
-
-.launch-heading {
-    font-size: clamp(20px, 2.8vw, 40px);
-    letter-spacing: 5px;
-    text-align: center;
-    margin-bottom: 8px;
-}
-
-.launch-subtitle {
-    color: #b9c1cc;
-    font-size: clamp(9px, 1vw, 13px);
-    letter-spacing: 3px;
-    text-align: center;
-    margin-bottom: 14px;
-}
-
-.poster-frame {
-    width: min(94vw, 115vh);
-    aspect-ratio: 16 / 9;
-    max-height: 62vh;
-    padding: 6px;
-    background: linear-gradient(135deg, #f8fafc, #8995a4, #e9edf2);
-    box-shadow:
-        0 0 25px rgba(255,255,255,.28),
-        0 0 70px rgba(180,195,215,.18);
-}
-
-.poster-image {
-    width: 100%;
-    height: 100%;
-    display: block;
-    object-fit: contain;
-    background: #10151d;
-}
-
-.poster-placeholder {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    text-align: center;
-    padding: 20px;
-    color: #e7ebf1;
-    background: radial-gradient(circle at center, #414b59, #10151d 75%);
-}
-
-.poster-placeholder h2 {
-    font-size: clamp(22px, 4vw, 55px);
-    letter-spacing: 5px;
-    margin-bottom: 15px;
-}
-
-.poster-placeholder p {
-    font-size: clamp(10px, 1.5vw, 17px);
-    letter-spacing: 3px;
-    color: #c3ccd8;
-}
-
-.launch-button {
-    margin-top: 14px;
-    width: min(450px, 80vw);
-    padding: 15px;
-    font-size: 13px;
-}
-
-/* =================================
-   PAGE 4 - LAUNCH COUNTDOWN
-================================= */
-
-#page4 {
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    text-align: center;
-}
-
-.countdown-label {
-    font-size: clamp(16px, 2vw, 25px);
-    letter-spacing: 7px;
-    color: #c5ced9;
-}
-
-.countdown-number {
-    font-size: clamp(100px, 25vw, 260px);
-    font-weight: bold;
-    color: #f1f4f8;
-    text-shadow:
-        0 0 20px rgba(255,255,255,.6),
-        0 0 70px rgba(200,220,255,.4);
-    animation: countdownZoom .9s ease;
-}
-
-@keyframes countdownZoom {
-    0% {
-        transform: scale(1.5);
-        opacity: 0;
-    }
-    100% {
-        transform: scale(1);
-        opacity: 1;
-    }
-}
-
-/* =================================
-   PAGE 5 - FINAL SCREEN
-================================= */
-
-#page5 {
-    justify-content: center;
-    align-items: center;
-    flex-direction: column;
-    text-align: center;
-    background:
-        radial-gradient(circle at center, #414c5c 0%, #151c27 45%, #05070b 100%);
-}
-
-#particles {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    z-index: 1;
-}
-
-.final-content {
-    position: relative;
-    z-index: 2;
-}
-
-.final-title {
-    font-size: clamp(35px, 7vw, 95px);
-    font-weight: bold;
-    letter-spacing: 5px;
-    line-height: 1.3;
-    padding: 20px;
-    color: #f4f7fb;
-    text-shadow:
-        0 0 15px rgba(255,255,255,.7),
-        0 0 45px rgba(210,225,245,.5);
-    animation: finalReveal 2s ease forwards;
-}
-
-.final-subtitle {
-    font-size: clamp(12px, 2vw, 22px);
-    letter-spacing: 8px;
-    color: #cbd4df;
-    margin-top: 15px;
-}
-
-@keyframes finalReveal {
-    0% {
-        transform: scale(.6);
-        opacity: 0;
-        filter: blur(10px);
-    }
-    100% {
-        transform: scale(1);
-        opacity: 1;
-        filter: blur(0);
-    }
-}
-
-/* CONTROL PANEL */
-
-.control-panel {
-    position: fixed;
-    z-index: 100;
-    right: 15px;
-    bottom: 15px;
-    display: flex;
-    gap: 8px;
-}
-
-.control-button {
-    padding: 9px 12px;
-    border: 1px solid rgba(230,235,245,.45);
-    background: rgba(10,14,21,.75);
-    color: white;
-    cursor: pointer;
-    font-size: 11px;
-    letter-spacing: 1px;
-    backdrop-filter: blur(8px);
-}
-
-.control-button:hover {
-    background: #dce1e8;
-    color: #10141b;
-}
-
-/* MOBILE */
-
-@media (max-width: 600px) {
-    .password-container {
-        padding: 40px 20px;
-    }
-
-    .password-input {
-        font-size: 25px;
-        letter-spacing: 10px;
-    }
-
-    .transaction-stage {
-        padding: 12px;
-    }
-
-    .transaction-title {
-        letter-spacing: 4px;
-    }
-
-    .transaction-subtitle {
-        letter-spacing: 2px;
-    }
-
-    .gate-container {
-        width: 96vw;
-        max-height: 48vh;
-    }
-
-    .system-footer {
-        font-size: 7px;
-        letter-spacing: 1px;
-    }
-
-    .poster-frame {
-        width: 95vw;
-        max-height: 55vh;
-    }
-
-    .control-panel {
-        right: 8px;
-        bottom: 8px;
-        gap: 5px;
-    }
-
-    .control-button {
-        padding: 8px;
-        font-size: 9px;
-    }
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Majlis Perasmian Rasmi</title>
+  <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
+  <main class="stage">
 
-<!-- PAGE 1: PASSWORD -->
+    <!-- RUNNING TEXT -->
+    <div class="ticker">
+      <div class="ticker-track">
+        <span>INFOFEST 2026: "KLIK. TEROKA. CIPTA."</span>
+        <span class="ticker-star">✦</span>
+        <span>DIGIFEST: "Different Phase, One Purpose"</span>
+        <span class="ticker-star">✦</span>
+        <span>Kembara 3M Bersama Si Cilik</span>
+        <span class="ticker-star">✦</span>
+        <span>INFOFEST 2026: "KLIK. TEROKA. CIPTA."</span>
+        <span class="ticker-star">✦</span>
+        <span>DIGIFEST: "Different Phase, One Purpose"</span>
+        <span class="ticker-star">✦</span>
+        <span>Kembara 3M Bersama Si Cilik</span>
+        <span class="ticker-star">✦</span>
+      </div>
+    </div>
 
-<section id="page1" class="page active">
-    <div class="password-container">
+    <!-- MUSIC CONTROL -->
+    <button class="music-button" id="musicButton" type="button">
+      <span class="music-symbol">♫</span>
+      <span id="musicLabel">MUSIC: OFF</span>
+    </button>
 
-        <div class="password-logo">✦</div>
+    <!-- AUDIO -->
+    <audio id="music1" src="music-1.mpeg" loop preload="auto"></audio>
+    <audio id="music2" src="music-2.mp3" loop preload="auto"></audio>
+    <audio id="music3" src="music-3.mp3" loop preload="auto"></audio>
 
-        <h1 class="silver-text">DIGITAL ACCESS</h1>
+    <!-- BACKGROUND DECORATION -->
+    <div class="ambient ambient-one"></div>
+    <div class="ambient ambient-two"></div>
+    <div class="particle-layer" id="particleLayer"></div>
 
-        <p>
-            SELAMAT DATANG KE MAJLIS PELANCARAN DIGITAL
-            <br>
-            SILA MASUKKAN KATA LALUAN UNTUK MENERUSKAN
-        </p>
+    <!-- ACCESS SCREEN -->
+    <section class="screen access-screen active" id="accessScreen">
+      <div class="access-panel">
+        <div class="access-top-line"></div>
 
-        <form id="passwordForm">
+        <div class="access-emblem">✦</div>
+        <p class="eyebrow">SECURE ACCESS SYSTEM</p>
 
-            <input
-                type="text"
-                id="passwordInput"
-                class="password-input"
-                placeholder="MASUKKAN KOD"
-                maxlength="4"
-                minlength="4"
-                autocomplete="off"
-                spellcheck="false"
-                required
-            >
+        <h1>WELCOME</h1>
+        <p class="access-subtitle">MAJLIS PERASMIAN RASMI</p>
 
-            <button type="submit" class="primary-button">
-                AKSES SISTEM
-            </button>
+        <div class="access-divider"></div>
 
-            <div id="errorMessage" class="error-message"></div>
+        <p class="input-instruction">ENTER YOUR 6-LETTER ACCESS CODE</p>
 
+        <form id="accessForm" autocomplete="off">
+          <input
+            type="text"
+            id="accessCode"
+            maxlength="6"
+            minlength="6"
+            placeholder="______"
+            autocomplete="off"
+            autocapitalize="characters"
+            spellcheck="false"
+            aria-label="Six letter access code"
+          >
+
+          <div class="input-progress">
+            <span id="letterCount">0 / 6 LETTERS</span>
+            <span id="inputStatus">WAITING FOR INPUT</span>
+          </div>
+
+          <button class="access-button" type="submit">
+            VERIFY ACCESS
+            <span>→</span>
+          </button>
         </form>
-    </div>
-</section>
 
+        <p class="access-footer">AUTHORISED PERSONNEL ONLY</p>
+      </div>
+    </section>
 
-<!-- PAGE 2: CINEMATIC TRANSACTION -->
+    <!-- SCANNING SCREEN -->
+    <section class="screen scanning-screen" id="scanningScreen">
+      <div class="scan-panel">
+        <div class="scan-ring ring-one"></div>
+        <div class="scan-ring ring-two"></div>
+        <div class="scan-ring ring-three"></div>
 
-<section id="page2" class="page">
-
-    <div class="transaction-stage">
-
-        <div class="scan-line"></div>
-        <div class="screen-flash" id="screenFlash"></div>
-
-        <div class="transaction-header">
-
-            <p class="system-label">SECURE LAUNCH SYSTEM</p>
-
-            <h1 class="transaction-title">
-                SYSTEM ACTIVATION
-            </h1>
-
-            <p class="transaction-subtitle" id="transactionSubtitle">
-                ESTABLISHING CONNECTION
-            </p>
-
+        <div class="scan-core">
+          <span class="scan-check">⌕</span>
         </div>
 
-        <div class="loading-section">
+        <p class="eyebrow">SECURITY VERIFICATION</p>
+        <h1>SCANNING ACCESS CODE</h1>
+        <p class="scan-message" id="scanMessage">VERIFYING IDENTIFICATION...</p>
 
-            <div class="loading-bar">
-                <div class="loading-progress" id="loadingProgress"></div>
-            </div>
-
-            <p id="loadingPercentage">0%</p>
-
+        <div class="scan-progress">
+          <div class="scan-progress-fill" id="scanProgressFill"></div>
         </div>
 
-        <div class="activation-countdown" id="activationCountdown">
-            <span id="activationNumber">03</span>
-        </div>
+        <p class="scan-percentage" id="scanPercentage">0%</p>
+      </div>
+    </section>
 
-        <div class="gate-container" id="gateContainer">
+    <!-- ACCESS GRANTED SCREEN -->
+    <section class="screen granted-screen" id="grantedScreen">
+      <div class="granted-icon">✓</div>
+      <p class="eyebrow">SECURITY VERIFICATION</p>
+      <h1>ACCESS GRANTED</h1>
+      <p>ACCESS CODE IS CORRECT</p>
+      <div class="granted-line"></div>
+      <p class="granted-small">PREPARING THE OPENING CEREMONY...</p>
+    </section>
 
-            <div class="energy-ring ring-one"></div>
-            <div class="energy-ring ring-two"></div>
-
-            <div class="gate-light"></div>
-
-            <div class="gate-center">
-                <span>WELCOME</span>
-            </div>
-
-            <div class="gate gate-left">
-                <div class="gate-pattern"></div>
-                <div class="gate-symbol">✦</div>
-            </div>
-
-            <div class="gate gate-right">
-                <div class="gate-pattern"></div>
-                <div class="gate-symbol">✦</div>
-            </div>
-
-            <div class="gate-particles" id="gateParticles"></div>
-
-        </div>
-
-        <div class="transaction-status" id="transactionStatus">
-            INITIALIZING SYSTEM...
-        </div>
-
-        <div class="system-footer">
-
-            <span>POWER SYSTEM: <b id="powerValue">0%</b></span>
-
-            <span>SECURITY: VERIFIED</span>
-
-            <span>STATUS: <b id="systemState">STANDBY</b></span>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<!-- PAGE 3: OFFICIAL POSTER -->
-
-<section id="page3" class="page">
-
-    <div class="launch-content">
-
-        <h1 class="launch-heading silver-text">
-            OFFICIAL LAUNCH
-        </h1>
-
-        <p class="launch-subtitle">
-            MAJLIS PELANCARAN RASMI
+    <!-- FIRST WRONG PASSWORD SCREEN -->
+    <section class="screen warning-screen" id="warningScreen">
+      <div class="warning-panel">
+        <div class="warning-symbol">!</div>
+        <p class="warning-eyebrow">SECURITY ALERT</p>
+        <h1>PASSWORD SALAH</h1>
+        <p class="warning-main">PASSWORD ANDA SALAH</p>
+        <p class="warning-description">
+          Sila cuba sekali lagi dengan kod akses yang betul.
         </p>
-
-        <div class="poster-frame">
-
-            <!-- GANTI DENGAN POSTER ANDA -->
-
-            <div class="poster-placeholder" id="posterPlaceholder">
-                <h2>OFFICIAL POSTER</h2>
-                <p>YOUR PROGRAM POSTER HERE</p>
-                <p style="margin-top:20px; font-size:10px;">
-                    LANDSCAPE FORMAT 16:9
-                </p>
-            </div>
-
-            <!--
-            Untuk menggunakan poster:
-            Gantikan poster-placeholder dengan:
-
-            <img src="poster.jpg"
-                 class="poster-image"
-                 alt="Poster Program">
-            -->
-
-        </div>
-
-        <button
-            class="primary-button launch-button"
-            id="launchButton"
-            onclick="startCountdown()"
-        >
-            LAUNCH NOW
+        <div class="warning-divider"></div>
+        <p class="warning-last">
+          AMARAN: Jika percubaan seterusnya salah, sistem akan terputus.
+        </p>
+        <button class="retry-button" id="retryButton" type="button">
+          CUBA SEKALI LAGI
         </button>
+      </div>
+    </section>
 
-    </div>
+    <!-- BLACK SCREEN AFTER SECOND WRONG ATTEMPT -->
+    <section class="screen blackout-screen" id="blackoutScreen">
+      <button
+        class="system-reset"
+        id="resetButton"
+        type="button"
+        aria-label="Reset system"
+        title="Reset system"
+      ></button>
+    </section>
 
-</section>
+    <!-- COUNTDOWN SCREEN -->
+    <section class="screen countdown-screen" id="countdownScreen">
+      <div class="countdown-content">
+        <p class="eyebrow">THE CEREMONY IS ABOUT TO BEGIN</p>
+        <h1>GET READY</h1>
 
+        <div class="countdown-wrap">
+          <div class="countdown-wave wave-one"></div>
+          <div class="countdown-wave wave-two"></div>
+          <div class="countdown-wave wave-three"></div>
+          <div class="countdown-number" id="countdownNumber">5</div>
+        </div>
 
-<!-- PAGE 4: COUNTDOWN -->
+        <p class="countdown-caption">PREPARE FOR THE GRAND OPENING</p>
+      </div>
+    </section>
 
-<section id="page4" class="page">
+    <!-- GATE OPENING SCREEN -->
+    <section class="screen gate-screen" id="gateScreen">
+      <div class="gate-glow"></div>
 
-    <div class="countdown-label silver-text">
-        OFFICIAL LAUNCH IN
-    </div>
+      <div class="gate-heading">
+        <p class="eyebrow">A NEW JOURNEY BEGINS</p>
+        <h1>THE GRAND OPENING</h1>
+      </div>
 
-    <div id="countdownNumber" class="countdown-number">
-        5
-    </div>
+      <div class="gate-structure">
+        <div class="gate-frame">
+          <div class="gate-inner-light"></div>
 
-    <div class="subtitle">
-        GET READY
-    </div>
+          <div class="gate-panel gate-left">
+            <div class="gate-lines"></div>
+            <div class="gate-edge"></div>
+          </div>
 
-</section>
+          <div class="gate-panel gate-right">
+            <div class="gate-lines"></div>
+            <div class="gate-edge"></div>
+          </div>
 
+          <div class="gate-center-beam"></div>
+        </div>
+      </div>
 
-<!-- PAGE 5: FINAL SCREEN -->
+      <div class="gate-floor-glow"></div>
+      <p class="gate-caption">OPENING THE GATE TO A WORLD OF POSSIBILITIES</p>
+    </section>
 
-<section id="page5" class="page">
+    <!-- OFFICIAL OPENING SCREEN -->
+    <section class="screen official-screen" id="officialScreen">
+      <div class="official-glow"></div>
+      <div class="official-border"></div>
 
-    <canvas id="particles"></canvas>
+      <div class="particle-layer official-particles" id="officialParticles"></div>
+      <div class="thumb-layer" id="thumbLayer"></div>
+      <div class="star-layer" id="starLayer"></div>
 
-    <div class="final-content">
+      <div class="official-content">
+        <p class="official-eyebrow">AN UNFORGETTABLE MOMENT</p>
 
-        <h1 class="final-title">
-            PROGRAM<br>
-            RASMI DIBUKA!
-        </h1>
+        <h1 class="official-heading">MAJLIS DIRASMIKAN</h1>
 
-        <p class="final-subtitle">
-            THE CEREMONY BEGINS
+        <div class="official-line"></div>
+
+        <p class="official-subheading">
+          TIGA PROGRAM · SATU MATLAMAT
         </p>
 
-    </div>
-
-</section>
-
-
-<!-- CONTROL PANEL -->
-
-<div class="control-panel">
-
-    <button class="control-button" onclick="toggleSound()" id="soundButton">
-        SOUND ON
-    </button>
-
-    <button class="control-button" onclick="toggleFullscreen()">
-        FULLSCREEN
-    </button>
-
-    <button class="control-button" onclick="resetSystem()">
-        RESET
-    </button>
-
-</div>
-
-
-<script>
-
-/* =================================
-   SYSTEM VARIABLES
-================================= */
-
-const CORRECT_PASSWORD = "DIAM";
-
-let soundEnabled = true;
-let audioContext = null;
-let activeTimers = [];
-let particleAnimation = null;
-
-
-/* =================================
-   TIMER MANAGEMENT
-================================= */
-
-function addTimer(callback, delay) {
-    const timer = setTimeout(callback, delay);
-    activeTimers.push(timer);
-    return timer;
-}
-
-function clearAllTimers() {
-    activeTimers.forEach(timer => {
-        clearTimeout(timer);
-        clearInterval(timer);
-    });
-
-    activeTimers = [];
-}
-
-
-/* =================================
-   PAGE CONTROL
-================================= */
-
-function showPage(pageId) {
-
-    document.querySelectorAll(".page").forEach(page => {
-        page.classList.remove("active");
-    });
-
-    document.getElementById(pageId).classList.add("active");
-
-}
-
-
-/* =================================
-   PASSWORD SYSTEM
-================================= */
-
-const passwordInput = document.getElementById("passwordInput");
-
-passwordInput.addEventListener("input", function() {
-
-    this.value = this.value
-        .toUpperCase()
-        .replace(/[^A-Z]/g, "")
-        .slice(0, 4);
-
-});
-
-
-document.getElementById("passwordForm").addEventListener("submit", function(event) {
-
-    event.preventDefault();
-
-    const enteredPassword = passwordInput.value;
-    const errorMessage = document.getElementById("errorMessage");
-
-    if (enteredPassword === CORRECT_PASSWORD) {
-
-        errorMessage.textContent = "";
-
-        startAudio();
-
-        showPage("page2");
-
-        startTransaction();
-
-    } else {
-
-        errorMessage.textContent =
-            "KATA LALUAN TIDAK TEPAT. SILA CUBA LAGI.";
-
-        passwordInput.value = "";
-        passwordInput.focus();
-
-    }
-
-});
-
-
-/* =================================
-   AUDIO SYSTEM
-================================= */
-
-function startAudio() {
-
-    if (!soundEnabled) return;
-
-    try {
-
-        if (!audioContext) {
-            audioContext = new (
-                window.AudioContext || window.webkitAudioContext
-            )();
-        }
-
-        if (audioContext.state === "suspended") {
-            audioContext.resume();
-        }
-
-    } catch (error) {
-        console.log("Audio is not supported.");
-    }
-
-}
-
-
-function playTone(frequency, duration, volume = 0.12, type = "sine") {
-
-    if (!soundEnabled || !audioContext) return;
-
-    const oscillator = audioContext.createOscillator();
-    const gain = audioContext.createGain();
-
-    oscillator.type = type;
-
-    oscillator.frequency.setValueAtTime(
-        frequency,
-        audioContext.currentTime
-    );
-
-    gain.gain.setValueAtTime(
-        volume,
-        audioContext.currentTime
-    );
-
-    gain.gain.exponentialRampToValueAtTime(
-        0.001,
-        audioContext.currentTime + duration
-    );
-
-    oscillator.connect(gain);
-    gain.connect(audioContext.destination);
-
-    oscillator.start();
-    oscillator.stop(audioContext.currentTime + duration);
-
-}
-
-
-function playDigitalSound() {
-
-    playTone(420, .3, .1, "sine");
-
-    addTimer(() => {
-        playTone(650, .35, .1, "sine");
-    }, 250);
-
-    addTimer(() => {
-        playTone(850, .5, .12, "triangle");
-    }, 550);
-
-}
-
-
-function playGateSound() {
-
-    playTone(90, 2.5, .18, "sawtooth");
-
-    addTimer(() => {
-        playTone(180, 2, .08, "sine");
-    }, 300);
-
-}
-
-
-function playFanfare() {
-
-    const notes = [
-        [523.25, 0],
-        [659.25, 250],
-        [783.99, 500],
-        [1046.5, 800]
-    ];
-
-    notes.forEach(note => {
-
-        addTimer(() => {
-            playTone(note[0], .9, .14, "triangle");
-        }, note[1]);
-
-    });
-
-}
-
-
-/* =================================
-   TRANSACTION LOADING
-================================= */
-
-function updateLoading(value) {
-
-    document.getElementById("loadingProgress").style.width =
-        value + "%";
-
-    document.getElementById("loadingPercentage").textContent =
-        value + "%";
-
-    document.getElementById("powerValue").textContent =
-        value + "%";
-
-}
-
-
-/* =================================
-   ACTIVATION COUNTDOWN
-================================= */
-
-function showActivationNumber(number) {
-
-    const container = document.getElementById("activationCountdown");
-    const numberElement = document.getElementById("activationNumber");
-
-    numberElement.textContent = number;
-
-    container.classList.remove("active");
-
-    void container.offsetWidth;
-
-    container.classList.add("active");
-
-}
-
-
-/* =================================
-   PARTICLE EXPLOSION AT GATE
-================================= */
-
-function createGateSparks() {
-
-    const container = document.getElementById("gateParticles");
-
-    for (let i = 0; i < 65; i++) {
-
-        const spark = document.createElement("span");
-
-        spark.className = "gate-spark";
-
-        spark.style.left = "50%";
-        spark.style.top = "50%";
-
-        spark.style.setProperty(
-            "--dx",
-            (Math.random() - .5) * 900 + "px"
-        );
-
-        spark.style.setProperty(
-            "--dy",
-            (Math.random() - .5) * 450 + "px"
-        );
-
-        spark.style.animationDelay =
-            Math.random() * .5 + "s";
-
-        container.appendChild(spark);
-
-        addTimer(() => spark.remove(), 2500);
-
-    }
-
-}
-
-
-/* =================================
-   SCREEN FLASH
-================================= */
-
-function triggerScreenFlash() {
-
-    const flash = document.getElementById("screenFlash");
-
-    flash.classList.remove("flash");
-
-    void flash.offsetWidth;
-
-    flash.classList.add("flash");
-
-}
-
-
-/* =================================
-   CINEMATIC TRANSACTION
-================================= */
-
-function startTransaction() {
-
-    const status = document.getElementById("transactionStatus");
-    const subtitle = document.getElementById("transactionSubtitle");
-    const gate = document.getElementById("gateContainer");
-    const stage = document.querySelector(".transaction-stage");
-    const systemState = document.getElementById("systemState");
-
-    updateLoading(0);
-
-    status.textContent = "ESTABLISHING SECURE CONNECTION...";
-    subtitle.textContent = "CONNECTING TO MAIN SERVER";
-
-    systemState.textContent = "CONNECTING";
-
-    // STAGE 1: SYSTEM SCANNING
-
-    playDigitalSound();
-
-    for (let i = 1; i <= 10; i++) {
-
-        addTimer(() => {
-            updateLoading(i * 5);
-        }, i * 250);
-
-    }
-
-    addTimer(() => {
-
-        status.textContent = "SECURITY CHECK COMPLETED";
-        subtitle.textContent = "ACCESS AUTHORIZED";
-
-        systemState.textContent = "VERIFIED";
-
-        playTone(850, .5, .12);
-
-    }, 2800);
-
-
-    // STAGE 2: ENERGY CHARGING
-
-    addTimer(() => {
-
-        status.textContent = "CHARGING MAIN ENERGY CORE...";
-        subtitle.textContent = "POWERING UP THE GATE";
-
-        updateLoading(65);
-
-        gate.classList.add("energy-active");
-
-        playTone(120, 2, .15, "sawtooth");
-
-    }, 3500);
-
-
-    // STAGE 3: ACTIVATION COUNTDOWN
-
-    addTimer(() => {
-
-        status.textContent = "MAIN GATE ACTIVATION";
-        subtitle.textContent = "FINAL COUNTDOWN INITIATED";
-
-        updateLoading(80);
-
-        showActivationNumber("03");
-
-        playTone(400, .5, .15);
-
-    }, 5200);
-
-
-    addTimer(() => {
-
-        showActivationNumber("02");
-
-        playTone(550, .5, .15);
-
-    }, 6200);
-
-
-    addTimer(() => {
-
-        showActivationNumber("01");
-
-        playTone(750, .5, .15);
-
-    }, 7200);
-
-
-    // STAGE 4: GATE OPENING
-
-    addTimer(() => {
-
-        status.textContent = "OPENING THE MAIN GATE...";
-        subtitle.textContent = "OFFICIAL LAUNCH SEQUENCE";
-
-        updateLoading(100);
-
-        systemState.textContent = "ACTIVATED";
-
-        triggerScreenFlash();
-
-        stage.classList.add("camera-shake");
-
-        gate.classList.remove("energy-active");
-        gate.classList.add("gate-open");
-
-        createGateSparks();
-
-        playGateSound();
-
-        playTone(1000, 1.5, .18, "triangle");
-
-    }, 8200);
-
-
-    // STAGE 5: COMPLETION
-
-    addTimer(() => {
-
-        status.textContent = "SYSTEM ACTIVATED SUCCESSFULLY";
-
-        subtitle.textContent =
-            "WELCOME TO THE OFFICIAL CEREMONY";
-
-        createGateSparks();
-
-        playTone(880, .7, .12);
-
-    }, 11000);
-
-
-    // TRANSITION TO POSTER
-
-    addTimer(() => {
-
-        showPage("page3");
-
-    }, 13000);
-
-}
-
-
-/* =================================
-   OFFICIAL LAUNCH COUNTDOWN
-================================= */
-
-function startCountdown() {
-
-    const launchButton = document.getElementById("launchButton");
-
-    launchButton.disabled = true;
-    launchButton.textContent = "LAUNCHING...";
-
-    showPage("page4");
-
-    let count = 5;
-
-    const countdownNumber =
-        document.getElementById("countdownNumber");
-
-    countdownNumber.textContent = count;
-
-    playTone(500, .25, .1);
-
-    const countdownInterval = setInterval(() => {
-
-        count--;
-
-        if (count > 0) {
-
-            countdownNumber.textContent = count;
-
-            countdownNumber.style.animation = "none";
-
-            void countdownNumber.offsetWidth;
-
-            countdownNumber.style.animation =
-                "countdownZoom .9s ease";
-
-            playTone(500 + count * 60, .25, .1);
-
-        } else {
-
-            clearInterval(countdownInterval);
-
-            showPage("page5");
-
-            playFanfare();
-
-            startParticles();
-
-        }
-
-    }, 1000);
-
-    activeTimers.push(countdownInterval);
-
-}
-
-
-/* =================================
-   FINAL SCREEN PARTICLES
-================================= */
-
-function startParticles() {
-
-    const canvas = document.getElementById("particles");
-    const ctx = canvas.getContext("2d");
-
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-    const particles = [];
-
-    for (let i = 0; i < 130; i++) {
-
-        particles.push({
-
-            x: Math.random() * canvas.width,
-            y: Math.random() * canvas.height,
-
-            size: Math.random() * 3 + 1,
-
-            speedX: (Math.random() - .5) * 2,
-            speedY: Math.random() * 3 + 1,
-
-            opacity: Math.random()
-
-        });
-
-    }
-
-    if (particleAnimation) {
-        cancelAnimationFrame(particleAnimation);
-    }
-
-    function animate() {
-
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-        particles.forEach(particle => {
-
-            particle.x += particle.speedX;
-            particle.y += particle.speedY;
-
-            if (particle.y > canvas.height) {
-
-                particle.y = -10;
-                particle.x = Math.random() * canvas.width;
-
-            }
-
-            if (particle.x < 0) {
-                particle.x = canvas.width;
-            }
-
-            if (particle.x > canvas.width) {
-                particle.x = 0;
-            }
-
-            ctx.beginPath();
-
-            ctx.arc(
-                particle.x,
-                particle.y,
-                particle.size,
-                0,
-                Math.PI * 2
-            );
-
-            ctx.fillStyle =
-                `rgba(225,235,250,${particle.opacity})`;
-
-            ctx.shadowBlur = 12;
-            ctx.shadowColor = "#dce8fa";
-
-            ctx.fill();
-
-        });
-
-        particleAnimation = requestAnimationFrame(animate);
-
-    }
-
-    animate();
-
-}
-
-
-/* =================================
-   SOUND CONTROL
-================================= */
-
-function toggleSound() {
-
-    soundEnabled = !soundEnabled;
-
-    const button = document.getElementById("soundButton");
-
-    button.textContent =
-        soundEnabled ? "SOUND ON" : "SOUND OFF";
-
-    if (soundEnabled) {
-
-        startAudio();
-
-        playTone(650, .3, .1);
-
-    }
-
-}
-
-
-/* =================================
-   FULLSCREEN CONTROL
-================================= */
-
-function toggleFullscreen() {
-
-    if (!document.fullscreenElement) {
-
-        document.documentElement.requestFullscreen?.();
-
-    } else {
-
-        document.exitFullscreen?.();
-
-    }
-
-}
-
-
-/* =================================
-   RESET SYSTEM
-================================= */
-
-function resetSystem() {
-
-    clearAllTimers();
-
-    if (particleAnimation) {
-
-        cancelAnimationFrame(particleAnimation);
-
-        particleAnimation = null;
-
-    }
-
-    const gate = document.getElementById("gateContainer");
-
-    gate.classList.remove("gate-open", "energy-active");
-
-    document.querySelector(".transaction-stage")
-        .classList.remove("camera-shake");
-
-    document.getElementById("transactionStatus").textContent =
-        "INITIALIZING SYSTEM...";
-
-    document.getElementById("transactionSubtitle").textContent =
-        "ESTABLISHING CONNECTION";
-
-    document.getElementById("loadingProgress").style.width = "0%";
-
-    document.getElementById("loadingPercentage").textContent = "0%";
-
-    document.getElementById("powerValue").textContent = "0%";
-
-    document.getElementById("systemState").textContent = "STANDBY";
-
-    document.getElementById("activationCountdown")
-        .classList.remove("active");
-
-    document.getElementById("gateParticles").innerHTML = "";
-
-    document.getElementById("screenFlash").classList.remove("flash");
-
-    document.getElementById("passwordInput").value = "";
-
-    document.getElementById("errorMessage").textContent = "";
-
-    document.getElementById("launchButton").disabled = false;
-
-    document.getElementById("launchButton").textContent = "LAUNCH NOW";
-
-    document.getElementById("countdownNumber").textContent = "5";
-
-    const canvas = document.getElementById("particles");
-
-    const ctx = canvas.getContext("2d");
-
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-    showPage("page1");
-
-    document.getElementById("passwordInput").focus();
-
-}
-
-
-/* =================================
-   WINDOW RESIZE
-================================= */
-
-window.addEventListener("resize", () => {
-
-    const canvas = document.getElementById("particles");
-
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-
-});
-
-</script>
-
+        <div class="program-columns">
+
+          <article class="program-card program-cyan">
+            <div class="program-glow"></div>
+            <div class="program-icon">✦</div>
+            <p class="program-label">INFORMATION & DISCOVERY</p>
+            <h2>INFOFEST 2026</h2>
+            <p class="program-tagline">"KLIK. TEROKA. CIPTA."</p>
+          </article>
+
+          <article class="program-card program-purple">
+            <div class="program-glow"></div>
+            <div class="program-icon">◈</div>
+            <p class="program-label">DIGITAL INNOVATION</p>
+            <h2>DIGIFEST</h2>
+            <p class="program-tagline">"Different Phase, One Purpose"</p>
+          </article>
+
+          <article class="program-card program-gold">
+            <div class="program-glow"></div>
+            <div class="program-icon">✧</div>
+            <p class="program-label">LEARNING & EXPLORATION</p>
+            <h2>Kembara 3M</h2>
+            <p class="program-tagline">Bersama Si Cilik</p>
+          </article>
+
+        </div>
+
+        <div class="event-details">
+          <p class="event-location">SEKOLAH KEBANGSAAN MERBOK</p>
+          <div class="event-meta">
+            <span>30 NOVEMBER</span>
+            <span class="event-separator">✦</span>
+            <span>8.00 PAGI</span>
+          </div>
+        </div>
+
+        <button class="montage-button" id="montageButton" type="button">
+          <span class="play-icon">▶</span>
+          TONTON VIDEO MONTAJ
+        </button>
+      </div>
+    </section>
+
+    <!-- MONTAGE SCREEN -->
+    <section class="screen montage-screen" id="montageScreen">
+      <video
+        id="montageVideo"
+        src="montaj.mp4"
+        controls
+        playsinline
+        preload="auto"
+      ></video>
+
+      <button class="back-button" id="backButton" type="button">
+        KEMBALI
+      </button>
+    </section>
+
+  </main>
+
+  <script src="script.js"></script>
 </body>
 </html>
