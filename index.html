@@ -1,10 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="ms">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Majlis Perasmian Rasmi</title>
+  <meta name="theme-color" content="#020713">
+  <title>Majlis Perasmian | INFOFEST 2026</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -13,63 +13,57 @@
     <!-- RUNNING TEXT -->
     <div class="ticker">
       <div class="ticker-track">
-        <span>INFOFEST 2026: "KLIK. TEROKA. CIPTA."</span>
-        <span class="ticker-star">✦</span>
-        <span>DIGIFEST: "Different Phase, One Purpose"</span>
-        <span class="ticker-star">✦</span>
+        <span>INFOFEST 2026: KLIK. TEROKA. CIPTA.</span>
+        <span class="ticker-star">◆</span>
+        <span>DIGIFEST: Different Phase, One Purpose</span>
+        <span class="ticker-star">◆</span>
         <span>Kembara 3M Bersama Si Cilik</span>
-        <span class="ticker-star">✦</span>
-        <span>INFOFEST 2026: "KLIK. TEROKA. CIPTA."</span>
-        <span class="ticker-star">✦</span>
-        <span>DIGIFEST: "Different Phase, One Purpose"</span>
-        <span class="ticker-star">✦</span>
+        <span class="ticker-star">◆</span>
+        <span>INFOFEST 2026: KLIK. TEROKA. CIPTA.</span>
+        <span class="ticker-star">◆</span>
+        <span>DIGIFEST: Different Phase, One Purpose</span>
+        <span class="ticker-star">◆</span>
         <span>Kembara 3M Bersama Si Cilik</span>
-        <span class="ticker-star">✦</span>
+        <span class="ticker-star">◆</span>
       </div>
     </div>
 
-    <!-- MUSIC CONTROL -->
+    <!-- MUSIC BUTTON -->
     <button class="music-button" id="musicButton" type="button">
       <span class="music-symbol">♫</span>
       <span id="musicLabel">MUSIC: OFF</span>
     </button>
 
-    <!-- AUDIO -->
-    <audio id="music1" src="music-1.mpeg" loop preload="auto"></audio>
-    <audio id="music2" src="music-2.mp3" loop preload="auto"></audio>
-    <audio id="music3" src="music-3.mp3" loop preload="auto"></audio>
-
-    <!-- BACKGROUND DECORATION -->
     <div class="ambient ambient-one"></div>
     <div class="ambient ambient-two"></div>
-    <div class="particle-layer" id="particleLayer"></div>
 
     <!-- ACCESS SCREEN -->
     <section class="screen access-screen active" id="accessScreen">
+      <div class="particle-layer" id="particleLayer"></div>
+
       <div class="access-panel">
         <div class="access-top-line"></div>
+        <div class="access-emblem">⌁</div>
 
-        <div class="access-emblem">✦</div>
-        <p class="eyebrow">SECURE ACCESS SYSTEM</p>
-
+        <p class="eyebrow">SECURE EVENT SYSTEM</p>
         <h1>WELCOME</h1>
-        <p class="access-subtitle">MAJLIS PERASMIAN RASMI</p>
+        <p class="access-subtitle">ENTER THE ACCESS CODE TO BEGIN</p>
 
         <div class="access-divider"></div>
 
-        <p class="input-instruction">ENTER YOUR 6-LETTER ACCESS CODE</p>
+        <form id="accessForm">
+          <label for="accessCode">AUTHORIZATION CODE</label>
 
-        <form id="accessForm" autocomplete="off">
           <input
-            type="text"
             id="accessCode"
+            name="accessCode"
+            type="text"
             maxlength="6"
-            minlength="6"
-            placeholder="______"
             autocomplete="off"
             autocapitalize="characters"
             spellcheck="false"
-            aria-label="Six letter access code"
+            placeholder="••••••"
+            aria-label="Access code"
           >
 
           <div class="input-progress">
@@ -77,13 +71,16 @@
             <span id="inputStatus">WAITING FOR INPUT</span>
           </div>
 
+          <p class="input-instruction">
+            ENTER SIX LETTERS TO CONTINUE
+          </p>
+
           <button class="access-button" type="submit">
-            VERIFY ACCESS
-            <span>→</span>
+            VERIFY ACCESS <span>→</span>
           </button>
         </form>
 
-        <p class="access-footer">AUTHORISED PERSONNEL ONLY</p>
+        <p class="access-footer">AUTHORIZED PERSONNEL ONLY</p>
       </div>
     </section>
 
@@ -94,13 +91,14 @@
         <div class="scan-ring ring-two"></div>
         <div class="scan-ring ring-three"></div>
 
-        <div class="scan-core">
-          <span class="scan-check">⌕</span>
-        </div>
+        <div class="scan-core">⌁</div>
 
-        <p class="eyebrow">SECURITY VERIFICATION</p>
-        <h1>SCANNING ACCESS CODE</h1>
-        <p class="scan-message" id="scanMessage">VERIFYING IDENTIFICATION...</p>
+        <p class="eyebrow">SYSTEM AUTHENTICATION</p>
+        <h2>SCANNING ACCESS</h2>
+
+        <p class="scan-message" id="scanMessage">
+          VERIFYING IDENTIFICATION...
+        </p>
 
         <div class="scan-progress">
           <div class="scan-progress-fill" id="scanProgressFill"></div>
@@ -110,65 +108,62 @@
       </div>
     </section>
 
-    <!-- ACCESS GRANTED SCREEN -->
+    <!-- ACCESS GRANTED -->
     <section class="screen granted-screen" id="grantedScreen">
       <div class="granted-icon">✓</div>
-      <p class="eyebrow">SECURITY VERIFICATION</p>
+      <p class="eyebrow">IDENTITY VERIFIED</p>
       <h1>ACCESS GRANTED</h1>
-      <p>ACCESS CODE IS CORRECT</p>
       <div class="granted-line"></div>
-      <p class="granted-small">PREPARING THE OPENING CEREMONY...</p>
+      <p class="granted-small">WELCOME TO THE OPENING CEREMONY</p>
     </section>
 
-    <!-- FIRST WRONG PASSWORD SCREEN -->
+    <!-- WRONG PASSWORD -->
     <section class="screen warning-screen" id="warningScreen">
       <div class="warning-panel">
         <div class="warning-symbol">!</div>
         <p class="warning-eyebrow">SECURITY ALERT</p>
-        <h1>PASSWORD SALAH</h1>
-        <p class="warning-main">PASSWORD ANDA SALAH</p>
-        <p class="warning-description">
-          Sila cuba sekali lagi dengan kod akses yang betul.
-        </p>
+        <h1 class="warning-main">PASSWORD SALAH</h1>
         <div class="warning-divider"></div>
-        <p class="warning-last">
-          AMARAN: Jika percubaan seterusnya salah, sistem akan terputus.
+        <p class="warning-description">
+          KOD YANG DIMASUKKAN TIDAK SAH. SILA CUBA SEKALI LAGI.
         </p>
+        <p class="warning-last">AMARAN TERAKHIR</p>
         <button class="retry-button" id="retryButton" type="button">
-          CUBA SEKALI LAGI
+          TRY AGAIN
         </button>
       </div>
     </section>
 
-    <!-- BLACK SCREEN AFTER SECOND WRONG ATTEMPT -->
+    <!-- BLACKOUT -->
     <section class="screen blackout-screen" id="blackoutScreen">
       <button
         class="system-reset"
         id="resetButton"
         type="button"
         aria-label="Reset system"
-        title="Reset system"
-      ></button>
+      >↻</button>
     </section>
 
-    <!-- COUNTDOWN SCREEN -->
+    <!-- COUNTDOWN -->
     <section class="screen countdown-screen" id="countdownScreen">
+      <div class="countdown-wave wave-one"></div>
+      <div class="countdown-wave wave-two"></div>
+      <div class="countdown-wave wave-three"></div>
+
       <div class="countdown-content">
-        <p class="eyebrow">THE CEREMONY IS ABOUT TO BEGIN</p>
-        <h1>GET READY</h1>
+        <p class="eyebrow">GET READY</p>
 
         <div class="countdown-wrap">
-          <div class="countdown-wave wave-one"></div>
-          <div class="countdown-wave wave-two"></div>
-          <div class="countdown-wave wave-three"></div>
-          <div class="countdown-number" id="countdownNumber">5</div>
+          <span class="countdown-number" id="countdownNumber">5</span>
         </div>
 
-        <p class="countdown-caption">PREPARE FOR THE GRAND OPENING</p>
+        <p class="countdown-caption">
+          THE CEREMONY BEGINS IN
+        </p>
       </div>
     </section>
 
-    <!-- GATE OPENING SCREEN -->
+    <!-- DOUBLE GATE -->
     <section class="screen gate-screen" id="gateScreen">
       <div class="gate-glow"></div>
 
@@ -196,87 +191,126 @@
       </div>
 
       <div class="gate-floor-glow"></div>
-      <p class="gate-caption">OPENING THE GATE TO A WORLD OF POSSIBILITIES</p>
+
+      <p class="gate-caption">
+        OPENING THE GATE TO A WORLD OF POSSIBILITIES
+      </p>
     </section>
 
     <!-- OFFICIAL OPENING SCREEN -->
     <section class="screen official-screen" id="officialScreen">
-      <div class="official-glow"></div>
+
+      <div class="official-background"></div>
+      <div class="official-grid"></div>
       <div class="official-border"></div>
 
-      <div class="particle-layer official-particles" id="officialParticles"></div>
+      <div class="particle-layer" id="officialParticles"></div>
       <div class="thumb-layer" id="thumbLayer"></div>
       <div class="star-layer" id="starLayer"></div>
 
       <div class="official-content">
-        <p class="official-eyebrow">AN UNFORGETTABLE MOMENT</p>
 
-        <h1 class="official-heading">MAJLIS DIRASMIKAN</h1>
-
-        <div class="official-line"></div>
-
-        <p class="official-subheading">
-          TIGA PROGRAM · SATU MATLAMAT
-        </p>
+        <div class="official-title-wrapper">
+          <h1 class="official-heading">MAJLIS DIRASMIKAN</h1>
+        </div>
 
         <div class="program-columns">
 
+          <!-- INFOFEST -->
           <article class="program-card program-cyan">
-            <div class="program-glow"></div>
-            <div class="program-icon">✦</div>
-            <p class="program-label">INFORMATION & DISCOVERY</p>
+            <div class="card-top-line"></div>
+
+            <div class="program-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M8 4L2 12L8 20"></path>
+                <path d="M16 4L22 12L16 20"></path>
+                <path d="M14 3L10 21"></path>
+              </svg>
+            </div>
+
             <h2>INFOFEST 2026</h2>
-            <p class="program-tagline">"KLIK. TEROKA. CIPTA."</p>
+            <p class="program-tagline">“KLIK. TEROKA. CIPTA.”</p>
           </article>
 
+          <!-- DIGIFEST -->
           <article class="program-card program-purple">
-            <div class="program-glow"></div>
-            <div class="program-icon">◈</div>
-            <p class="program-label">DIGITAL INNOVATION</p>
+            <div class="card-top-line"></div>
+
+            <div class="program-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M12 3L2 9L12 15L22 9L12 3Z"></path>
+                <path d="M2 15L12 21L22 15"></path>
+              </svg>
+            </div>
+
             <h2>DIGIFEST</h2>
-            <p class="program-tagline">"Different Phase, One Purpose"</p>
+            <p class="program-tagline">
+              “Different Phase, One Purpose”
+            </p>
           </article>
 
+          <!-- KEMBARA 3M -->
           <article class="program-card program-gold">
-            <div class="program-glow"></div>
-            <div class="program-icon">✧</div>
-            <p class="program-label">LEARNING & EXPLORATION</p>
-            <h2>Kembara 3M</h2>
+            <div class="card-top-line"></div>
+
+            <div class="program-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M12 2L15 9H22L16.5 14L18.5 22L12 17.5L5.5 22L7.5 14L2 9H9L12 2Z"></path>
+              </svg>
+            </div>
+
+            <h2>KEMBARA 3M</h2>
             <p class="program-tagline">Bersama Si Cilik</p>
           </article>
 
         </div>
 
-        <div class="event-details">
-          <p class="event-location">SEKOLAH KEBANGSAAN MERBOK</p>
-          <div class="event-meta">
-            <span>30 NOVEMBER</span>
-            <span class="event-separator">✦</span>
-            <span>8.00 PAGI</span>
-          </div>
+        <!-- EVENT DETAILS -->
+        <div class="event-meta">
+          <p class="event-location">
+            SEKOLAH KEBANGSAAN MERBOK
+          </p>
+
+          <p class="event-date">
+            30 NOVEMBER <span>|</span> 8.00 PAGI
+          </p>
         </div>
 
-        <button class="montage-button" id="montageButton" type="button">
-          <span class="play-icon">▶</span>
-          TONTON VIDEO MONTAJ
+        <!-- MONTAGE BUTTON -->
+        <button
+          class="montage-button"
+          id="montageButton"
+          type="button"
+        >
+          <span>TONTON VIDEO MONTAJ</span>
+          <span class="montage-arrow" aria-hidden="true">▶</span>
         </button>
+
       </div>
+
+      <div class="screen-corner corner-top-left"></div>
+      <div class="screen-corner corner-top-right"></div>
+      <div class="screen-corner corner-bottom-left"></div>
+      <div class="screen-corner corner-bottom-right"></div>
+
     </section>
 
-    <!-- MONTAGE SCREEN -->
+    <!-- MONTAGE VIDEO -->
     <section class="screen montage-screen" id="montageScreen">
-      <video
-        id="montageVideo"
-        src="montaj.mp4"
-        controls
-        playsinline
-        preload="auto"
-      ></video>
-
       <button class="back-button" id="backButton" type="button">
-        KEMBALI
+        ← KEMBALI
       </button>
+
+      <video id="montageVideo" controls playsinline preload="metadata">
+        <source src="montaj.mp4" type="video/mp4">
+        Your browser does not support HTML5 video.
+      </video>
     </section>
+
+    <!-- AUDIO FILES -->
+    <audio id="music1" src="music-1.mpeg" preload="auto" loop></audio>
+    <audio id="music2" src="music-2.mp3" preload="auto" loop></audio>
+    <audio id="music3" src="music-3.mp3" preload="auto" loop></audio>
 
   </main>
 

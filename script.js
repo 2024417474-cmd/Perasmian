@@ -1,4 +1,3 @@
-
 /* =========================================
    CONFIGURATION
 ========================================= */
@@ -53,11 +52,12 @@ let musicEnabled = false;
 let currentMusic = null;
 
 let scanInterval = null;
-let countdownInterval = null;
+let countdownTimeout = null;
 let gateTimeout = null;
+let gateZoomTimeout = null;
+
 let accessLocked = false;
 let ceremonyStarted = false;
-
 let audioContext = null;
 
 
@@ -66,7 +66,7 @@ let audioContext = null;
 ========================================= */
 
 function showScreen(screenToShow) {
-  Object.values(screens).forEach((screen) => {
+  Object.values(screens).forEach(screen => {
     screen.classList.remove("active");
   });
 
@@ -79,7 +79,7 @@ function showScreen(screenToShow) {
 ========================================= */
 
 function stopAllMusic() {
-  [music1, music2, music3].forEach((audio) => {
+  [music1, music2, music3].forEach(audio => {
     audio.pause();
     audio.currentTime = 0;
   });
@@ -88,16 +88,17 @@ function stopAllMusic() {
 }
 
 function updateMusicButton() {
-  musicLabel.textContent = musicEnabled ? "MUSIC: ON" : "MUSIC: OFF";
+  musicLabel.textContent = musicEnabled
+    ? "MUSIC: ON"
+    : "MUSIC: OFF";
+
   musicButton.classList.toggle("is-playing", musicEnabled);
 }
 
 async function playTrack(audio) {
   stopAllMusic();
 
-  if (!musicEnabled) {
-    return;
-  }
+  if (!musicEnabled) return;
 
   currentMusic = audio;
 
@@ -113,7 +114,7 @@ musicButton.addEventListener("click", async () => {
   updateMusicButton();
 
   if (!musicEnabled) {
-    [music1, music2, music3].forEach((audio) => audio.pause());
+    [music1, music2, music3].forEach(audio => audio.pause());
     return;
   }
 
@@ -121,7 +122,7 @@ musicButton.addEventListener("click", async () => {
     try {
       await currentMusic.play();
     } catch (error) {
-      console.warn("Audio playback was blocked:", error);
+      console.warn(error);
     }
   } else if (screens.official.classList.contains("active")) {
     playTrack(music3);
@@ -139,7 +140,8 @@ musicButton.addEventListener("click", async () => {
 
 function getAudioContext() {
   if (!audioContext) {
-    const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+    const AudioContextClass =
+      window.AudioContext || window.webkitAudioContext;
 
     if (AudioContextClass) {
       audioContext = new AudioContextClass();
@@ -155,7 +157,6 @@ function getAudioContext() {
 
 function playTypingSound() {
   const context = getAudioContext();
-
   if (!context) return;
 
   const oscillator = context.createOscillator();
@@ -163,10 +164,16 @@ function playTypingSound() {
 
   oscillator.type = "square";
   oscillator.frequency.setValueAtTime(650, context.currentTime);
-  oscillator.frequency.exponentialRampToValueAtTime(280, context.currentTime + 0.045);
+  oscillator.frequency.exponentialRampToValueAtTime(
+    280,
+    context.currentTime + 0.045
+  );
 
   gain.gain.setValueAtTime(0.045, context.currentTime);
-  gain.gain.exponentialRampToValueAtTime(0.001, context.currentTime + 0.05);
+  gain.gain.exponentialRampToValueAtTime(
+    0.001,
+    context.currentTime + 0.05
+  );
 
   oscillator.connect(gain);
   gain.connect(context.destination);
@@ -177,7 +184,6 @@ function playTypingSound() {
 
 function playErrorSound() {
   const context = getAudioContext();
-
   if (!context) return;
 
   const oscillator = context.createOscillator();
@@ -188,8 +194,10 @@ function playErrorSound() {
   oscillator.frequency.setValueAtTime(95, context.currentTime + 0.4);
 
   gain.gain.setValueAtTime(0.16, context.currentTime);
-  gain.gain.setValueAtTime(0.16, context.currentTime + 0.65);
-  gain.gain.exponentialRampToValueAtTime(0.001, context.currentTime + 0.9);
+  gain.gain.exponentialRampToValueAtTime(
+    0.001,
+    context.currentTime + 0.9
+  );
 
   oscillator.connect(gain);
   gain.connect(context.destination);
@@ -198,12 +206,19 @@ function playErrorSound() {
   oscillator.stop(context.currentTime + 0.95);
 }
 
+
+/* =========================================
+   VOICE SYSTEM
+========================================= */
+
 function speakWarning() {
   if (!("speechSynthesis" in window)) return;
 
   window.speechSynthesis.cancel();
 
-  const warning = new SpeechSynthesisUtterance("PASSWORD ANDA SALAH");
+  const warning = new SpeechSynthesisUtterance(
+    "PASSWORD ANDA SALAH"
+  );
 
   warning.lang = "ms-MY";
   warning.rate = 0.78;
@@ -233,12 +248,9 @@ function speakCountdown(number) {
    ACCESS CODE INPUT
 ========================================= */
 
-// Only alphabetic characters are accepted.
-// The input is automatically converted to uppercase.
-// The maximum length is six characters.
-
 accessCode.addEventListener("input", () => {
-  const previousLength = accessCode.dataset.previousLength || "0";
+  const previousLength =
+    Number(accessCode.dataset.previousLength || 0);
 
   const cleanValue = accessCode.value
     .replace(/[^a-zA-Z]/g, "")
@@ -247,7 +259,8 @@ accessCode.addEventListener("input", () => {
 
   accessCode.value = cleanValue;
 
-  letterCount.textContent = `${cleanValue.length} / 6 LETTERS`;
+  letterCount.textContent =
+    `${cleanValue.length} / 6 LETTERS`;
 
   if (cleanValue.length === 6) {
     inputStatus.textContent = "CODE READY";
@@ -257,16 +270,15 @@ accessCode.addEventListener("input", () => {
     inputStatus.textContent = "WAITING FOR INPUT";
   }
 
-  if (cleanValue.length > Number(previousLength)) {
+  if (cleanValue.length > previousLength) {
     playTypingSound();
   }
 
-  accessCode.dataset.previousLength = String(cleanValue.length);
+  accessCode.dataset.previousLength =
+    String(cleanValue.length);
 });
 
-// Block non-letter keys before they appear in the input.
-
-accessCode.addEventListener("keydown", (event) => {
+accessCode.addEventListener("keydown", event => {
   const allowedKeys = [
     "Backspace",
     "Delete",
@@ -291,9 +303,7 @@ accessCode.addEventListener("keydown", (event) => {
   }
 });
 
-// Prevent non-letter text from being pasted.
-
-accessCode.addEventListener("paste", (event) => {
+accessCode.addEventListener("paste", event => {
   event.preventDefault();
 
   const pastedText = event.clipboardData
@@ -304,7 +314,8 @@ accessCode.addEventListener("paste", (event) => {
   const remaining = 6 - accessCode.value.length;
   const insertion = pastedText.slice(0, remaining);
 
-  accessCode.value = (accessCode.value + insertion).slice(0, 6);
+  accessCode.value =
+    (accessCode.value + insertion).slice(0, 6);
 
   accessCode.dispatchEvent(new Event("input"));
 });
@@ -314,7 +325,7 @@ accessCode.addEventListener("paste", (event) => {
    ACCESS VERIFICATION
 ========================================= */
 
-accessForm.addEventListener("submit", (event) => {
+accessForm.addEventListener("submit", event => {
   event.preventDefault();
 
   if (accessLocked || ceremonyStarted) return;
@@ -337,7 +348,7 @@ accessForm.addEventListener("submit", (event) => {
 
 
 /* =========================================
-   WRONG PASSWORD SYSTEM
+   WRONG PASSWORD
 ========================================= */
 
 function handleWrongPassword() {
@@ -355,10 +366,7 @@ function handleWrongPassword() {
 
   playErrorSound();
 
-  // Voice warning is triggered after the warning screen appears.
-  setTimeout(() => {
-    speakWarning();
-  }, 250);
+  setTimeout(speakWarning, 250);
 
   accessCode.value = "";
   letterCount.textContent = "0 / 6 LETTERS";
@@ -385,9 +393,7 @@ retryButton.addEventListener("click", () => {
 
 function showBlackout() {
   stopAllMusic();
-
   window.speechSynthesis?.cancel();
-
   showScreen(screens.blackout);
 }
 
@@ -398,18 +404,20 @@ function showBlackout() {
 
 resetButton.addEventListener("click", () => {
   clearInterval(scanInterval);
-  clearInterval(countdownInterval);
+  clearTimeout(countdownTimeout);
   clearTimeout(gateTimeout);
+  clearTimeout(gateZoomTimeout);
 
   stopAllMusic();
-
   window.speechSynthesis?.cancel();
 
   failedAttempts = 0;
   accessLocked = false;
   ceremonyStarted = false;
 
-  screens.gate.classList.remove("opening");
+  screens.gate.classList.remove("opening", "zooming");
+  screens.countdown.classList.remove("tick");
+  countdownNumber.classList.remove("tick");
 
   accessCode.value = "";
   accessCode.dataset.previousLength = "0";
@@ -444,9 +452,7 @@ function startScanning() {
   scanInterval = setInterval(() => {
     progress += 2;
 
-    if (progress > 100) {
-      progress = 100;
-    }
+    if (progress > 100) progress = 100;
 
     scanProgressFill.style.width = `${progress}%`;
     scanPercentage.textContent = `${progress}%`;
@@ -483,7 +489,7 @@ function showAccessGranted() {
 
 
 /* =========================================
-   COUNTDOWN SEQUENCE - 16 SECONDS
+   COUNTDOWN - 14 SECONDS
 ========================================= */
 
 function beginCountdownSequence() {
@@ -491,7 +497,6 @@ function beginCountdownSequence() {
 
   showScreen(screens.countdown);
 
-  // Stop music 1 and start music 2.
   if (musicEnabled) {
     playTrack(music2);
   } else {
@@ -500,17 +505,16 @@ function beginCountdownSequence() {
 
   const countdownNumbers = [5, 4, 3, 2, 1];
 
-  const totalCountdownTime = 16000;
-  const intervalTime = totalCountdownTime / countdownNumbers.length;
-
+  const tickDuration = 2800;
   let index = 0;
 
   function displayNextNumber() {
     if (index >= countdownNumbers.length) {
-      clearInterval(countdownInterval);
-      countdownInterval = null;
+      countdownTimeout = null;
 
       window.speechSynthesis?.cancel();
+
+      screens.countdown.classList.remove("tick");
 
       openGate();
       return;
@@ -518,38 +522,58 @@ function beginCountdownSequence() {
 
     const number = countdownNumbers[index];
 
-    countdownNumber.textContent = number;
+    // Restart animation on every number.
+    countdownNumber.classList.remove("tick");
+    screens.countdown.classList.remove("tick");
+
+    void countdownNumber.offsetWidth;
+    void screens.countdown.offsetWidth;
+
+    countdownNumber.textContent = String(number);
+
+    countdownNumber.classList.add("tick");
+    screens.countdown.classList.add("tick");
+
     speakCountdown(number);
 
     index += 1;
+
+    countdownTimeout = setTimeout(
+      displayNextNumber,
+      tickDuration
+    );
   }
 
   displayNextNumber();
-
-  countdownInterval = setInterval(
-    displayNextNumber,
-    intervalTime
-  );
 }
 
 
 /* =========================================
-   GATE OPENING - 6 SECONDS
+   DOUBLE GATE OPENING - 8 SECONDS
 ========================================= */
 
 function openGate() {
   showScreen(screens.gate);
 
-  screens.gate.classList.remove("opening");
+  screens.gate.classList.remove("opening", "zooming");
 
-  // Restart CSS animation from the beginning.
+  // Reset animation before starting.
   void screens.gate.offsetWidth;
 
-  screens.gate.classList.add("opening");
+  // Both gate leaves open at the same time.
+  requestAnimationFrame(() => {
+    screens.gate.classList.add("opening");
+  });
 
+  // Camera moves towards the golden light.
+  gateZoomTimeout = setTimeout(() => {
+    screens.gate.classList.add("zooming");
+  }, 6100);
+
+  // Reveal the official screen after 8 seconds.
   gateTimeout = setTimeout(() => {
     showOfficialScreen();
-  }, 6000);
+  }, 8000);
 }
 
 
@@ -564,7 +588,6 @@ function showOfficialScreen() {
   createThumbsUp();
   createStars();
 
-  // Stop music 2 and start music 3.
   if (musicEnabled) {
     playTrack(music3);
   } else {
@@ -584,6 +607,7 @@ function createParticles(container, amount) {
     const particle = document.createElement("span");
 
     particle.className = "particle";
+
     particle.style.left = `${Math.random() * 100}%`;
     particle.style.top = `${Math.random() * 100}%`;
 
@@ -603,7 +627,7 @@ function createParticles(container, amount) {
 
 
 /* =========================================
-   THUMBS-UP DECORATION - 20 ICONS
+   THUMBS UP - 20 ICONS
 ========================================= */
 
 function createThumbsUp() {
@@ -648,7 +672,9 @@ function createStars() {
 
     star.style.left = `${Math.random() * 100}%`;
     star.style.top = `${Math.random() * 100}%`;
-    star.style.fontSize = `${8 + Math.random() * 13}px`;
+
+    star.style.fontSize =
+      `${8 + Math.random() * 13}px`;
 
     star.style.setProperty(
       "--duration",
@@ -672,7 +698,6 @@ function createStars() {
 montageButton.addEventListener("click", async () => {
   showScreen(screens.montage);
 
-  // Music 3 stops only when montage is opened.
   if (currentMusic) {
     currentMusic.pause();
   }
@@ -686,7 +711,7 @@ montageButton.addEventListener("click", async () => {
       await montageVideo.requestFullscreen();
     }
   } catch (error) {
-    console.warn("Montage playback could not start automatically:", error);
+    console.warn("Montage playback could not start:", error);
   }
 });
 
@@ -700,7 +725,6 @@ function returnFromMontage() {
 
   showScreen(screens.official);
 
-  // Resume music 3 when returning to the official screen.
   if (musicEnabled) {
     playTrack(music3);
   }
